@@ -24,7 +24,6 @@ let alertTag = document.getElementById("customAlert");
 
 let toaster = document.getElementById("toast-container");
 
-// ENTER PRESSED
 $(document).keypress(function(e) {
     if (e.which == 13) {
         $("#guessBtn").click();
@@ -148,7 +147,11 @@ function guessSubmit() {
             img.src = "img/" + ++i + ".png";
             img.width = 64;
             img.height = 64;
+
+
             var textnode = document.createTextNode("Sean made " + (guess - element.guessRemain + 1) + " guesses in " + (second - element.timeRemain) + "s!");
+
+
             p.appendChild(img);
             p.appendChild(textnode);
             var hr = document.createElement("hr");
@@ -190,10 +193,11 @@ function createAlert(alertType) {
     }
 
     toaster.innerHTML += `<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+
     <div class="toast-body ${alertColor}" style="letter-spacing: 1px;">
         ${text}
     </div>
-    </div>`;
+</div>`;
     $('.toast').toast('show');
 }
 

@@ -24,7 +24,6 @@ let alertTag = document.getElementById("customAlert");
 
 let toaster = document.getElementById("toast-container");
 
-// ENTER PRESSED
 $(document).keypress(function(e) {
     if (e.which == 13) {
         $("#guessBtn").click();
