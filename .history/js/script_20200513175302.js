@@ -41,7 +41,6 @@ function startGame() {
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
 
@@ -113,13 +112,12 @@ function guessSubmit() {
         return;
     }
     let result = getResult();
-    createAlert(result);
     if ([4, 5].includes(result)) {
         resetToDefault();
         enableOrDisableBtn();
         displayDiv();
     }
-
+    createAlert(result);
 
     bestScores.sort((a, b) => (a.guessRemain > b.guessRemain) ? -1 : 1);
     guessHistory.innerHTML = "";
@@ -175,8 +173,6 @@ function createAlert(alertType) {
 
     let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
-
-    text += [4, 5].includes(alertType) ? " The random number is: " + randomNumber : "";
 
     // alert(alertColor);
 

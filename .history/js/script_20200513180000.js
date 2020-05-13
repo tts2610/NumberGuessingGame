@@ -113,13 +113,12 @@ function guessSubmit() {
         return;
     }
     let result = getResult();
-    createAlert(result);
     if ([4, 5].includes(result)) {
         resetToDefault();
         enableOrDisableBtn();
         displayDiv();
     }
-
+    createAlert(result);
 
     bestScores.sort((a, b) => (a.guessRemain > b.guessRemain) ? -1 : 1);
     guessHistory.innerHTML = "";
