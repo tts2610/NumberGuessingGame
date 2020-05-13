@@ -44,7 +44,7 @@ function startGame() {
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    autoFocus();
+    $(".alert").alert('close');
     alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
@@ -84,7 +84,7 @@ function timecounting() {
 }
 
 
-let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
+let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Sorry, better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
 
 
 function getResult() {
@@ -163,7 +163,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -229,8 +228,4 @@ function reset() {
     resetToDefault();
     enableOrDisableBtn();
     displayDiv();
-}
-
-function autoFocus() {
-    input.focus();
 }

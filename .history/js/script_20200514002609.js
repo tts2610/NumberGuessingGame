@@ -163,7 +163,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -232,5 +231,5 @@ function reset() {
 }
 
 function autoFocus() {
-    input.focus();
+    input.autofocus;
 }

@@ -32,9 +32,9 @@ h1 {
 }
 
 .numberGuessingBox .row .right_handSide {
-    background-color: rgb(255, 255, 255);
+    background-color: rebeccapurple
     /* Fallback color */
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: rebeccapurple;
     /* Black w/opacity/see-through */
     border-radius: 15px;
     width: auto;

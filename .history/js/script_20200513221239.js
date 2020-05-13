@@ -22,8 +22,6 @@ let resetBtn = document.getElementById("resetBtn");
 
 let alertTag = document.getElementById("customAlert");
 
-let toaster = document.getElementById("toast-container");
-
 $(document).keypress(function(e) {
     if (e.which == 13) {
         $("#guessBtn").click();
@@ -38,13 +36,12 @@ $(document).ready(function() {
 });
 
 function startGame() {
-    toaster.innerHTML = ""
     secondRemaining.innerHTML = second;
     timecounting();
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    autoFocus();
+    $(".alert").alert('close');
     alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
@@ -74,17 +71,19 @@ function timecounting() {
         if (second == 0) {
             clearInterval(timer);
             createAlert(4);
-            reset();
+            resetToDefault();
+            enableOrDisableBtn();
+            displayDiv();
             return;
         }
         second -= 1;
-        secondRemaining.innerHTML = second + "s";
+        secondRemaining.innerHTML = second;
     }, 1000)
 
 }
 
 
-let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
+let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Sorry, better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
 
 
 function getResult() {
@@ -149,7 +148,7 @@ function guessSubmit() {
 
             // alert(guess + " " + element.guessRemain);
 
-            var textnode = document.createTextNode("Sean made " + (guess - element.guessRemain + 1) + " guesses in " + (second - element.timeRemain) + "s!"); // Create a text node
+            var textnode = document.createTextNode("Sean made " + (guess - element.guessRemain + 1) + " guesses in " + element.timeRemain + "s!"); // Create a text node
 
 
 
@@ -163,7 +162,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -184,53 +182,152 @@ function enableOrDisableBtn() {
 
 function createAlert(alertType) {
 
-    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "btn-danger" : "btn-info";
+    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? "! Try another round to rank up!" : "";
+    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber : "";
 
-    // // alert(alertColor);
+    // alert(alertColor);
 
-    // let alertDiv = document.createElement("div");
-    // alertDiv.className = "alert " + alertColor + " alert-dismissible fade show";
-    // var textnode = document.createTextNode(text);
-    // alertDiv.appendChild(textnode);
+    let alertDiv = document.createElement("div");
+    alertDiv.className = "alert " + alertColor + " alert-dismissible fade show";
+    var textnode = document.createTextNode(text);
+    alertDiv.appendChild(textnode);
 
-    // let button = document.createElement("button");
-    // button.type = "button"
-    // button.className = "close";
-    // button.setAttribute("data-dismiss", "alert");
+    let button = document.createElement("button");
+    button.type = "button"
+    button.className = "close";
+    button.setAttribute("data-dismiss", "alert");
 
 
-    // let span = document.createElement("span");
-    // span.innerHTML = "&times;";
-    // span.setAttribute("aria-hidden", "true");
-    // button.appendChild(span);
+    let span = document.createElement("span");
+    span.innerHTML = "&times;";
+    span.setAttribute("aria-hidden", "true");
+    button.appendChild(span);
 
-    // alertDiv.appendChild(button);
+    alertDiv.appendChild(button);
 
-    // alertTag.innerHTML = "";
-    // alertTag.appendChild(alertDiv);
-
-    if (toaster.childElementCount > 1 || [4, 5].includes(alertType)) {
-        toaster.innerHTML = "";
-    }
-
-    toaster.innerHTML += `<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-
-    <div class="toast-body ${alertColor}" style="letter-spacing: 1px;">
-        ${text}
-    </div>
-</div>`;
-    $('.toast').toast('show');
+    alertTag.innerHTML = "";
+    alertTag.appendChild(alertDiv);
 }
 
 function reset() {
     resetToDefault();
     enableOrDisableBtn();
     displayDiv();
+
 }
 
-function autoFocus() {
-    input.focus();
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 10;
+const ALERT_THRESHOLD = 5;
+
+const COLOR_CODES = {
+    info: {
+        color: "green"
+    },
+    warning: {
+        color: "orange",
+        threshold: WARNING_THRESHOLD
+    },
+    alert: {
+        color: "red",
+        threshold: ALERT_THRESHOLD
+    }
+};
+
+const TIME_LIMIT = 20;
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+document.getElementById("guessRemaining").innerHTML = `
+<div class="base-timer">
+  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g class="base-timer__circle">
+      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+      <path
+        id="base-timer-path-remaining"
+        stroke-dasharray="283"
+        class="base-timer__path-remaining ${remainingPathColor}"
+        d="
+          M 50, 50
+          m -45, 0
+          a 45,45 0 1,0 90,0
+          a 45,45 0 1,0 -90,0
+        "
+      ></path>
+    </g>
+  </svg>
+  <span id="base-timer-label" class="base-timer__label">${formatTime(
+    timeLeft
+  )}</span>
+</div>
+`;
+
+startTimer();
+
+function onTimesUp() {
+    clearInterval(timerInterval);
+}
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timePassed = timePassed += 1;
+        timeLeft = TIME_LIMIT - timePassed;
+        document.getElementById("base-timer-label").innerHTML = formatTime(
+            timeLeft
+        );
+        setCircleDasharray();
+        setRemainingPathColor(timeLeft);
+
+        if (timeLeft === 0) {
+            onTimesUp();
+        }
+    }, 1000);
+}
+
+function formatTime(time) {
+    const minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    if (seconds < 10) {
+        seconds = `0${seconds}`;
+    }
+
+    return `${minutes}:${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+    const { alert, warning, info } = COLOR_CODES;
+    if (timeLeft <= alert.threshold) {
+        document
+            .getElementById("base-timer-path-remaining")
+            .classList.remove(warning.color);
+        document
+            .getElementById("base-timer-path-remaining")
+            .classList.add(alert.color);
+    } else if (timeLeft <= warning.threshold) {
+        document
+            .getElementById("base-timer-path-remaining")
+            .classList.remove(info.color);
+        document
+            .getElementById("base-timer-path-remaining")
+            .classList.add(warning.color);
+    }
+}
+
+function calculateTimeFraction() {
+    const rawTimeFraction = timeLeft / TIME_LIMIT;
+    return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+    const circleDasharray = `${(
+    calculateTimeFraction() * FULL_DASH_ARRAY
+  ).toFixed(0)} 283`;
+    document
+        .getElementById("base-timer-path-remaining")
+        .setAttribute("stroke-dasharray", circleDasharray);
 }

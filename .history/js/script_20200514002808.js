@@ -232,5 +232,5 @@ function reset() {
 }
 
 function autoFocus() {
-    input.focus();
+    input.autofocus;
 }

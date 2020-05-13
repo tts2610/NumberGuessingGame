@@ -44,7 +44,7 @@ function startGame() {
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    autoFocus();
+    $(".alert").alert('close');
     alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
@@ -163,7 +163,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -229,8 +228,4 @@ function reset() {
     resetToDefault();
     enableOrDisableBtn();
     displayDiv();
-}
-
-function autoFocus() {
-    input.focus();
 }

@@ -44,7 +44,7 @@ function startGame() {
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    autoFocus();
+    $(".alert").alert('close');
     alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
@@ -84,7 +84,7 @@ function timecounting() {
 }
 
 
-let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
+let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Sorry, better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
 
 
 function getResult() {
@@ -163,7 +163,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -184,10 +183,10 @@ function enableOrDisableBtn() {
 
 function createAlert(alertType) {
 
-    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "btn-danger" : "btn-info";
+    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? "! Try another round to rank up!" : "";
+    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber + "! Try another round to rank up!" : "";
 
     // // alert(alertColor);
 
@@ -216,9 +215,9 @@ function createAlert(alertType) {
         toaster.innerHTML = "";
     }
 
-    toaster.innerHTML += `<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    toaster.innerHTML += `<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
 
-    <div class="toast-body ${alertColor}" style="letter-spacing: 1px;">
+    <div class="toast-body" style="background-color:red">
         ${text}
     </div>
 </div>`;
@@ -229,8 +228,4 @@ function reset() {
     resetToDefault();
     enableOrDisableBtn();
     displayDiv();
-}
-
-function autoFocus() {
-    input.focus();
 }

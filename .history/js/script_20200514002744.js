@@ -232,5 +232,6 @@ function reset() {
 }
 
 function autoFocus() {
-    input.focus();
+    alert("sss")
+    input.autofocus;
 }

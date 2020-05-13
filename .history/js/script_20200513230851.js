@@ -38,13 +38,12 @@ $(document).ready(function() {
 });
 
 function startGame() {
-    toaster.innerHTML = ""
     secondRemaining.innerHTML = second;
     timecounting();
     guessRemaining.textContent = guess;
     displayDiv();
     enableOrDisableBtn();
-    autoFocus();
+    $(".alert").alert('close');
     alert("Random number revealed(for testing lol): " + randomNumber);
 }
 
@@ -84,7 +83,7 @@ function timecounting() {
 }
 
 
-let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
+let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Sorry, better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
 
 
 function getResult() {
@@ -163,7 +162,6 @@ function guessSubmit() {
 
     // clear after insert
     input.value = "";
-    autoFocus();
 
 }
 
@@ -184,10 +182,10 @@ function enableOrDisableBtn() {
 
 function createAlert(alertType) {
 
-    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "btn-danger" : "btn-info";
+    let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? "! Try another round to rank up!" : "";
+    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber + "! Try another round to rank up!" : "";
 
     // // alert(alertColor);
 
@@ -211,26 +209,23 @@ function createAlert(alertType) {
 
     // alertTag.innerHTML = "";
     // alertTag.appendChild(alertDiv);
-
-    if (toaster.childElementCount > 1 || [4, 5].includes(alertType)) {
-        toaster.innerHTML = "";
-    }
-
-    toaster.innerHTML += `<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
-
-    <div class="toast-body ${alertColor}" style="letter-spacing: 1px;">
+    let toastRandom = Math.floor(Math.random() * 100) + 1;
+    toaster.innerHTML += `<div class="toast" id="toast${toastRandom}" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+    <div class="toast-header">
+        <strong class="mr-auto ${alertColor}">Oopps</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+    </div>
+    <div class="toast-body">
         ${text}
     </div>
 </div>`;
-    $('.toast').toast('show');
+    $('#toast' + alertType).toast('show');
 }
 
 function reset() {
     resetToDefault();
     enableOrDisableBtn();
     displayDiv();
-}
-
-function autoFocus() {
-    input.focus();
 }
