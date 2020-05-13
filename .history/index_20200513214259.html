@@ -39,8 +39,14 @@
                 </div>
             </div>
             <div class="col-7 right_handSide px-5">
-                <button onclick="startGame()" class="btn btn-light" id="startGameBtn">Start Game!</button>
-
+                <!-- <button onclick="startGame()" class="btn btn-info" id="startGameBtn">Start Game!</button> -->
+                <div class="button" onclick="startGame()" id="startGameBtn">
+                    <span>Hover Me</span>
+                    <svg>
+                    <polyline class="o1" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+                    <polyline class="o2" points="0 0, 150 0, 150 55, 0 55, 0 0"></polyline>
+                </svg>
+                </div>
                 <div id="inputDiv">
                     <div class="form customForm py-5">
                         <input type="number" class="form-control" id="guessInput" placeholder="Enter your guess here:" autofocus="autofocus" required>

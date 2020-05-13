@@ -185,7 +185,7 @@ function createAlert(alertType) {
     let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber : "";
+    text += [4, 5].includes(alertType) ? " The random number is: " + randomNumber : "";
 
     // alert(alertColor);
 

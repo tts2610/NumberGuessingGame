@@ -47,14 +47,8 @@ function startGame() {
 
 
 function displayDiv() {
-    if (div.style.display === "block" && startGameBtn.style.display === "none") {
-        div.style.display = "none";
-        startGameBtn.style.display = "block";
-    } else {
-        div.style.display = "block";
-        startGameBtn.style.display = "none";
-    }
-
+    if ($('#inputDiv').css('opacity') == 0) $('#inputDiv').css('opacity', 1);
+    else $('#inputDiv').css('opacity', 0);
 }
 
 function resetToDefault() {
@@ -185,7 +179,7 @@ function createAlert(alertType) {
     let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber : "";
+    text += [4, 5].includes(alertType) ? " The random number is: " + randomNumber : "";
 
     // alert(alertColor);
 
@@ -212,8 +206,5 @@ function createAlert(alertType) {
 }
 
 function reset() {
-    resetToDefault();
-    enableOrDisableBtn();
-    displayDiv();
 
 }

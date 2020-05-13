@@ -59,7 +59,7 @@ function displayDiv() {
 
 function resetToDefault() {
     clearInterval(timer);
-    guess = 9;
+    guess = 5;
     second = 30;
     historyBox = [];
     guessHistory.innerHTML = "";
@@ -140,15 +140,13 @@ function guessSubmit() {
         ranking.innerHTML = "";
         bestScores.forEach((element, i) => {
             var p = document.createElement("div");
-            p.className = "mt-3 mx-4";
+            p.className = "mt-3";
             var img = document.createElement("img")
             img.src = "img/" + ++i + ".png";
             img.width = 64;
             img.height = 64;
 
-            // alert(guess + " " + element.guessRemain);
-
-            var textnode = document.createTextNode("Sean made " + (guess - element.guessRemain + 1) + " guesses in " + element.timeRemain + "s!"); // Create a text node
+            var textnode = document.createTextNode("Sean made " + --element.guessRemain + " guesses in " + element.timeRemain + "s!"); // Create a text node
 
 
 
@@ -185,7 +183,7 @@ function createAlert(alertType) {
     let alertColor = [1, 2, 3, 4, 6].includes(alertType) ? "alert-danger" : "alert-success";
     let text = prompts[alertType];
 
-    text += [4, 5].includes(alertType) ? " The random number was: " + randomNumber : "";
+    text += [4, 5].includes(alertType) ? " The random number is: " + randomNumber : "";
 
     // alert(alertColor);
 
@@ -212,8 +210,5 @@ function createAlert(alertType) {
 }
 
 function reset() {
-    resetToDefault();
-    enableOrDisableBtn();
-    displayDiv();
 
 }
