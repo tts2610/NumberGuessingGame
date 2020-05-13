@@ -44,6 +44,10 @@ function startGame() {
 }
 
 
+// resetToDefault();
+// enableOrDisableBtn();
+// displayDiv();
+
 function displayDiv() {
     if (div.style.display === "block" && startGameBtn.style.display === "none") {
         div.style.display = "none";
@@ -130,22 +134,9 @@ function guessSubmit() {
     if (result == 5) {
         ranking.innerHTML = "";
         bestScores.forEach((element, i) => {
-            var p = document.createElement("div");
-            p.className = "mt-3";
-            var img = document.createElement("img")
-            img.src = "img/" + ++i + ".png";
-            img.width = 64;
-            img.height = 64;
-
-            var textnode = document.createTextNode(element.guessRemain + " guesses has been completed in " + element.timeRemain + " s"); // Create a text node
-
-
-
-            p.appendChild(img);
-            p.appendChild(textnode);
-            var hr = document.createElement("hr");
+            var p = document.createElement("p");
+            p.innerHTML = ++i + " " + element.guessRemain + " guesses has been completed in " + element.timeRemain + " s";
             ranking.append(p);
-            ranking.append(hr);
         });
     }
 

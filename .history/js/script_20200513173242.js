@@ -130,8 +130,7 @@ function guessSubmit() {
     if (result == 5) {
         ranking.innerHTML = "";
         bestScores.forEach((element, i) => {
-            var p = document.createElement("div");
-            p.className = "mt-3";
+            var p = document.createElement("p");
             var img = document.createElement("img")
             img.src = "img/" + ++i + ".png";
             img.width = 64;
@@ -145,7 +144,6 @@ function guessSubmit() {
             p.appendChild(textnode);
             var hr = document.createElement("hr");
             ranking.append(p);
-            ranking.append(hr);
         });
     }
 

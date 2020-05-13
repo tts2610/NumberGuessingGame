@@ -8,7 +8,7 @@
 
 .numberGuessingBox .row .left_handSide .box-2 {
     background-color: bisque;
-    height: auto;
+    height: 200px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;

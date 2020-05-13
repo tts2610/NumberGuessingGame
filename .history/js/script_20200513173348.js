@@ -131,7 +131,6 @@ function guessSubmit() {
         ranking.innerHTML = "";
         bestScores.forEach((element, i) => {
             var p = document.createElement("div");
-            p.className = "mt-3";
             var img = document.createElement("img")
             img.src = "img/" + ++i + ".png";
             img.width = 64;
