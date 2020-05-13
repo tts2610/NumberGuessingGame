@@ -140,7 +140,7 @@ function guessSubmit() {
             img.width = 64;
             img.height = 64;
 
-            var textnode = document.createTextNode("Sean made " + --element.guessRemain + " guesses in " + element.timeRemain + "s!"); // Create a text node
+            var textnode = document.createTextNode("Made " + element.guessRemain - 1 + " guesses in " + element.timeRemain + " s"); // Create a text node
 
 
 
