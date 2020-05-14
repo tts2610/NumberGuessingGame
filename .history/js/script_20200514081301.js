@@ -167,7 +167,7 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["failed", guess, second]);
             clearInterval(timer);
             createAlert(4);
             reset();
@@ -188,7 +188,7 @@ function getResult() {
         historyBox.push(input.value);
         if (input.value == randomNumber) {
             bestScores.push({ guessRemain: guess, timeRemain: second });
-            previousRecord.push(["SUCCEED", guess, second])
+            previousRecord.push(["succeed", guess, second])
             return 5;
         } else if (input.value < randomNumber) {
             result = 1;
@@ -198,7 +198,7 @@ function getResult() {
         guessRemaining.textContent = --guess;
         if (guess == 0) {
             result = 4;
-            previousRecord.push(["FAILED", guess, second])
+            previousRecord.push(["failed", guess, second])
         }
     }
     return result;
@@ -252,7 +252,7 @@ function insertPreviousRecord() {
         img.src = element[0] == "FAILED" ? "img/red_cross.png" : "img/green_tick.png";
         img.width = 32;
         img.height = 32;
-        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (guess - element[1] + 1) + " tries in " + (second - element[2]) + "s");
+        var textnode = document.createTextNode(element[0] + ", " + "Finished with " + (guess - element[1] + 1) + " tries in " + (second - element[2]) + "s");
         p.appendChild(img);
         p.appendChild(textnode);
 

@@ -106,7 +106,7 @@ function guessSubmit() {
             img.src = "img/" + ++i + ".png";
             img.width = 64;
             img.height = 64;
-            var textnode = document.createTextNode("Sean finished with " + (guess - element.guessRemain + 1) + " guesses in " + (second - element.timeRemain) + "s!");
+            var textnode = document.createTextNode("Sean finished with " + (guess - element.guessRemain) + " guesses in " + (second - element.timeRemain) + "s!");
             p.appendChild(img);
             p.appendChild(textnode);
             var hr = document.createElement("hr");
@@ -167,7 +167,7 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["failed", guess, second]);
             clearInterval(timer);
             createAlert(4);
             reset();
@@ -188,7 +188,7 @@ function getResult() {
         historyBox.push(input.value);
         if (input.value == randomNumber) {
             bestScores.push({ guessRemain: guess, timeRemain: second });
-            previousRecord.push(["SUCCEED", guess, second])
+            previousRecord.push(["succeed", guess, second])
             return 5;
         } else if (input.value < randomNumber) {
             result = 1;
@@ -198,7 +198,7 @@ function getResult() {
         guessRemaining.textContent = --guess;
         if (guess == 0) {
             result = 4;
-            previousRecord.push(["FAILED", guess, second])
+            previousRecord.push(["failed", guess, second])
         }
     }
     return result;
@@ -247,12 +247,12 @@ function insertPreviousRecord() {
     // previousRecord.reverse();
     previousRecord.forEach(element => {
         var p = document.createElement("div");
-        p.className = "mt-3 mx-4";
+        p.className = "";
         var img = document.createElement("img")
-        img.src = element[0] == "FAILED" ? "img/red_cross.png" : "img/green_tick.png";
+        img.src = element[0] == "failed" ? "img/red_down.png" : "img/green_up.png";
         img.width = 32;
         img.height = 32;
-        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (guess - element[1] + 1) + " tries in " + (second - element[2]) + "s");
+        var textnode = document.createTextNode(element[0] + ", " + "Finished with " + (guess - element[1]) + " tries in " + (second - element[2]) + "s");
         p.appendChild(img);
         p.appendChild(textnode);
 

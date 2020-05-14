@@ -5,9 +5,8 @@ let startGameBtn = document.getElementById("startGameBtn");
 // VARIABLE FOR CALCULATE
 let historyBox = [];
 let bestScores = [];
-let previousRecord = [];
-let guess = 5;
-let second = 20;
+let guess = 9;
+let second = 30;
 let randomNumber = Math.floor(Math.random() * 100) + 1;
 let timer;
 
@@ -17,7 +16,6 @@ let input = document.getElementById("guessInput");
 // LEFT BOXES
 let guessHistory = document.getElementById("guessHistory");
 let ranking = document.getElementById("ranking");
-let previousRound = document.getElementById("previousRound");
 
 // RIGHT BOXES
 let secondRemaining = document.getElementById("secondRemaining");
@@ -34,9 +32,7 @@ let toaster = document.getElementById("toast-container");
 let prompts = { 1: "Too Low!", 2: "Too High!", 3: "You already input that number!", 4: "Better luck next time!", 5: "Great Job!", 6: "Please input your number!" }
 
 
-// =========== MAIN ============ 
-
-// ENTER KEY PRESSED
+// ENTER PRESSED
 $(document).keypress(function(e) {
     if (e.which == 13) {
         $("#guessBtn").click();
@@ -64,7 +60,65 @@ function startGame() {
 }
 
 
-// GUESS BUTTON PRESSED
+function displayDiv() {
+    if (div.style.display === "block" && startGameBtn.style.display === "none") {
+        div.style.display = "none";
+        startGameBtn.style.display = "block";
+    } else {
+        div.style.display = "block";
+        startGameBtn.style.display = "none";
+    }
+
+}
+
+function resetToDefault() {
+    clearInterval(timer);
+    guess = 9;
+    second = 30;
+    historyBox = [];
+    guessHistory.innerHTML = "";
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+}
+
+function timecounting() {
+    timer = setInterval(() => {
+        if (second == 0) {
+            clearInterval(timer);
+            createAlert(4);
+            reset();
+            return;
+        }
+        second -= 1;
+        secondRemaining.innerHTML = second + "s";
+    }, 1000)
+
+}
+
+
+
+
+function getResult() {
+    let result = 0;
+    if (historyBox.includes(input.value)) {
+        result = 3;
+    } else {
+        historyBox.push(input.value);
+        if (input.value == randomNumber) {
+            bestScores.push({ guessRemain: guess, timeRemain: second });
+            return 5;
+        } else if (input.value < randomNumber) {
+            result = 1;
+        } else if (input.value > randomNumber) {
+            result = 2;
+        }
+        guessRemaining.textContent = --guess;
+        if (guess == 0) {
+            result = 4;
+        }
+    }
+    return result;
+}
+
 function guessSubmit() {
     if (guessBtn.disabled) return;
     else if (input.value == '' && !guessBtn.disabled) {
@@ -73,12 +127,10 @@ function guessSubmit() {
     }
     let result = getResult();
     createAlert(result);
-
     if ([4, 5].includes(result)) {
         resetToDefault();
         enableOrDisableBtn();
         displayDiv();
-        insertPreviousRecord();
     }
     bestScores.sort((a, b) => (a.guessRemain > b.guessRemain) ? -1 : 1);
     guessHistory.innerHTML = "";
@@ -88,6 +140,7 @@ function guessSubmit() {
         img.src = "img/dice.png";
         img.width = 60;
         img.height = 60;
+        // p.innerHTML = element;
         var textnode = document.createTextNode(element); // Create a text node
         p.appendChild(img);
         p.appendChild(textnode);
@@ -97,16 +150,13 @@ function guessSubmit() {
     if (result == 5) {
         ranking.innerHTML = "";
         bestScores.forEach((element, i) => {
-            if (i == 3) {
-                return;
-            }
             var p = document.createElement("div");
             p.className = "mt-3 mx-4";
             var img = document.createElement("img")
             img.src = "img/" + ++i + ".png";
             img.width = 64;
             img.height = 64;
-            var textnode = document.createTextNode("Sean finished with " + (guess - element.guessRemain + 1) + " guesses in " + (second - element.timeRemain) + "s!");
+            var textnode = document.createTextNode("Sean made " + (guess - element.guessRemain + 1) + " guesses in " + (second - element.timeRemain) + "s!");
             p.appendChild(img);
             p.appendChild(textnode);
             var hr = document.createElement("hr");
@@ -118,18 +168,8 @@ function guessSubmit() {
     // clear after insert
     input.value = "";
     autoFocus();
+
 }
-
-// RESET BUTTON PRESSED
-function reset() {
-    resetToDefault();
-    enableOrDisableBtn();
-    displayDiv();
-}
-
-// ============END-MAIN===========
-
-// =========EXTRA-FUNCTIONS=======
 
 function enableOrDisableBtn() {
     if (!input.disabled && !guessBtn.disabled && !resetBtn.disabled) {
@@ -144,65 +184,6 @@ function enableOrDisableBtn() {
 
 }
 
-function displayDiv() {
-    if (div.style.display === "block" && startGameBtn.style.display === "none") {
-        div.style.display = "none";
-        startGameBtn.style.display = "block";
-    } else {
-        div.style.display = "block";
-        startGameBtn.style.display = "none";
-    }
-
-}
-
-function resetToDefault() {
-    clearInterval(timer);
-    guess = 5;
-    second = 20;
-    historyBox = [];
-    guessHistory.innerHTML = "";
-    randomNumber = Math.floor(Math.random() * 100) + 1;
-}
-
-function timecounting() {
-    timer = setInterval(() => {
-        if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
-            clearInterval(timer);
-            createAlert(4);
-            reset();
-            insertPreviousRecord();
-            return;
-        }
-        second -= 1;
-        secondRemaining.innerHTML = second + "s";
-    }, 1000)
-
-}
-
-function getResult() {
-    let result = 0;
-    if (historyBox.includes(input.value)) {
-        result = 3;
-    } else {
-        historyBox.push(input.value);
-        if (input.value == randomNumber) {
-            bestScores.push({ guessRemain: guess, timeRemain: second });
-            previousRecord.push(["SUCCEED", guess, second])
-            return 5;
-        } else if (input.value < randomNumber) {
-            result = 1;
-        } else if (input.value > randomNumber) {
-            result = 2;
-        }
-        guessRemaining.textContent = --guess;
-        if (guess == 0) {
-            result = 4;
-            previousRecord.push(["FAILED", guess, second])
-        }
-    }
-    return result;
-}
 
 
 function createAlert(alertType) {
@@ -224,40 +205,10 @@ function createAlert(alertType) {
     $('.toast').toast('show');
 }
 
-{
-    /* <div class="mt-3 mx-4">
-        <img src="img/1.png" width="64" height="64">
-        Sean finished with 2 guesses in 6s!
-    </div> */
-}
-
-function insertPreviousRecord() {
-    previousRound.innerHTML = "";
-    // just for printing, have to reverse back after printing
-    previousRecord.reverse();
-    // let previousRecordUl = document.createElement("ul");
-    // previousRecord.forEach(element => {
-    //     var li = document.createElement("li");
-    //     // element = ["failed",guess,second]
-    //     var textnode = document.createTextNode(element[0] + " | " + "Finished with " + (guess - element[1]) + " tries in " + (second - element[2]) + "s");
-    //     li.appendChild(textnode);
-    //     previousRecordUl.appendChild(li);
-    // });
-    // previousRound.appendChild(previousRecordUl);
-    // previousRecord.reverse();
-    previousRecord.forEach(element => {
-        var p = document.createElement("div");
-        p.className = "mt-3 mx-4";
-        var img = document.createElement("img")
-        img.src = element[0] == "FAILED" ? "img/red_cross.png" : "img/green_tick.png";
-        img.width = 32;
-        img.height = 32;
-        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (guess - element[1] + 1) + " tries in " + (second - element[2]) + "s");
-        p.appendChild(img);
-        p.appendChild(textnode);
-
-        previousRound.append(p);
-    });
+function reset() {
+    resetToDefault();
+    enableOrDisableBtn();
+    displayDiv();
 }
 
 function autoFocus() {

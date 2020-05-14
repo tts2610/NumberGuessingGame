@@ -11,22 +11,11 @@ h1 {
     color: white;
 }
 
-::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
-}
-
- ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
-    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
-}
-
 .numberGuessingBox .row .left_handSide .box-1 {
     background-color: rgb(255, 255, 255);
     /* Fallback color */
     background-color: rgba(255, 255, 255, 0.4);
-    height: 100px;
+    height: 200px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -46,7 +35,7 @@ h1 {
     background-color: rgb(255, 255, 255);
     /* Fallback color */
     background-color: rgba(255, 255, 255, 0.4);
-    height: 100px;
+    height: 100;
     border-radius: 15px;
     overflow-y: auto;
 }

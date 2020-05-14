@@ -6,8 +6,8 @@ let startGameBtn = document.getElementById("startGameBtn");
 let historyBox = [];
 let bestScores = [];
 let previousRecord = [];
-let guess = 5;
-let second = 20;
+let guess = 9;
+let second = 10;
 let randomNumber = Math.floor(Math.random() * 100) + 1;
 let timer;
 
@@ -63,6 +63,16 @@ function startGame() {
     alert("Random number revealed(for testing): " + randomNumber);
 }
 
+// 
+//         let previousRecord = document.createElement("ul");
+//         previousRecord.forEach(element => {
+//             var li = document.createElement("li");
+//             // element = ["failed",[guess,second]]
+//             var textnode = document.createTextNode(element[0] + " / " + "Finished with " + guess - element[1][0] + 1 + " tries in " + element[1][1] + "s");
+//             li.appendChild(textnode);
+//             previousRecord.appendChild(li);
+//         });
+//         previousRound.appendChild(previousRecord);
 
 // GUESS BUTTON PRESSED
 function guessSubmit() {
@@ -75,10 +85,14 @@ function guessSubmit() {
     createAlert(result);
 
     if ([4, 5].includes(result)) {
+
+        insertPreviousRecord();
+
         resetToDefault();
         enableOrDisableBtn();
         displayDiv();
-        insertPreviousRecord();
+
+
     }
     bestScores.sort((a, b) => (a.guessRemain > b.guessRemain) ? -1 : 1);
     guessHistory.innerHTML = "";
@@ -157,8 +171,8 @@ function displayDiv() {
 
 function resetToDefault() {
     clearInterval(timer);
-    guess = 5;
-    second = 20;
+    guess = 9;
+    second = 10;
     historyBox = [];
     guessHistory.innerHTML = "";
     randomNumber = Math.floor(Math.random() * 100) + 1;
@@ -167,11 +181,11 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["failed", guess, second]);
+            insertPreviousRecord();
             clearInterval(timer);
             createAlert(4);
             reset();
-            insertPreviousRecord();
             return;
         }
         second -= 1;
@@ -188,7 +202,7 @@ function getResult() {
         historyBox.push(input.value);
         if (input.value == randomNumber) {
             bestScores.push({ guessRemain: guess, timeRemain: second });
-            previousRecord.push(["SUCCEED", guess, second])
+            previousRecord.push(["succeed", guess, second])
             return 5;
         } else if (input.value < randomNumber) {
             result = 1;
@@ -198,7 +212,7 @@ function getResult() {
         guessRemaining.textContent = --guess;
         if (guess == 0) {
             result = 4;
-            previousRecord.push(["FAILED", guess, second])
+            previousRecord.push(["failed", guess, second])
         }
     }
     return result;
@@ -224,40 +238,18 @@ function createAlert(alertType) {
     $('.toast').toast('show');
 }
 
-{
-    /* <div class="mt-3 mx-4">
-        <img src="img/1.png" width="64" height="64">
-        Sean finished with 2 guesses in 6s!
-    </div> */
-}
-
 function insertPreviousRecord() {
     previousRound.innerHTML = "";
-    // just for printing, have to reverse back after printing
     previousRecord.reverse();
-    // let previousRecordUl = document.createElement("ul");
-    // previousRecord.forEach(element => {
-    //     var li = document.createElement("li");
-    //     // element = ["failed",guess,second]
-    //     var textnode = document.createTextNode(element[0] + " | " + "Finished with " + (guess - element[1]) + " tries in " + (second - element[2]) + "s");
-    //     li.appendChild(textnode);
-    //     previousRecordUl.appendChild(li);
-    // });
-    // previousRound.appendChild(previousRecordUl);
-    // previousRecord.reverse();
+    let previousRecordUl = document.createElement("ul");
     previousRecord.forEach(element => {
-        var p = document.createElement("div");
-        p.className = "mt-3 mx-4";
-        var img = document.createElement("img")
-        img.src = element[0] == "FAILED" ? "img/red_cross.png" : "img/green_tick.png";
-        img.width = 32;
-        img.height = 32;
-        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (guess - element[1] + 1) + " tries in " + (second - element[2]) + "s");
-        p.appendChild(img);
-        p.appendChild(textnode);
-
-        previousRound.append(p);
+        var li = document.createElement("li");
+        // element = ["failed",guess,second]
+        var textnode = document.createTextNode(element[0] + " | " + "Finished with " + (guess - element[1] + 1) + " tries in " + (element[2]) + "s");
+        li.appendChild(textnode);
+        previousRecordUl.appendChild(li);
     });
+    previousRound.appendChild(previousRecordUl);
 }
 
 function autoFocus() {
