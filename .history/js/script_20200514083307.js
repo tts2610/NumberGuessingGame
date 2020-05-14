@@ -167,7 +167,7 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["FAILED", guess - 1, second]);
             clearInterval(timer);
             createAlert(4);
             reset();

@@ -167,7 +167,7 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["FAILED", --guess, second]);
             clearInterval(timer);
             createAlert(4);
             reset();
@@ -237,7 +237,7 @@ function insertPreviousRecord() {
         img.src = element[0] == "FAILED" ? "img/red_cross.png" : "img/green_tick.png";
         img.width = 32;
         img.height = 32;
-        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (guess - element[1]) + " tries in " + (second - element[2]) + "s");
+        var textnode = document.createTextNode(element[0] + " / " + "Finished with " + (element[1]) + " tries in " + (second - element[2]) + "s");
         p.appendChild(img);
         p.appendChild(textnode);
 

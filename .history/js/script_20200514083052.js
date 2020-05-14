@@ -167,7 +167,7 @@ function resetToDefault() {
 function timecounting() {
     timer = setInterval(() => {
         if (second == 0) {
-            previousRecord.push(["FAILED", guess, second]);
+            previousRecord.push(["FAILED", --guess, second]);
             clearInterval(timer);
             createAlert(4);
             reset();
@@ -188,7 +188,7 @@ function getResult() {
         historyBox.push(input.value);
         if (input.value == randomNumber) {
             bestScores.push({ guessRemain: guess, timeRemain: second });
-            previousRecord.push(["SUCCEED", guess - 1, second])
+            previousRecord.push(["SUCCEED", --guess, second])
             return 5;
         } else if (input.value < randomNumber) {
             result = 1;
